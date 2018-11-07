@@ -1,0 +1,72 @@
+<html>
+<head>
+	<title>Lick Button</title>
+</head>
+<body>
+	<script>
+
+		document.body.style.backgroundColor = 'gold';
+
+		var square = document.createElement( 'div' );
+		square.style.width = '100px';
+		square.style.height = '100px';
+		square.style.backgroundColor = 'red';
+		document.body.appendChild( square );
+
+		square.onclick = changeSquareColor;
+		function changeSquareColor()
+		{
+			this.style.backgroundColor = 'gold';
+			//oscillator
+			var synth = new AudioContext();
+			var a = synth.createOscillator();
+			a.type = 'sine';
+			a.frequency.value = 196;
+			a.start(0);
+			/*
+			var lpf = synth.createBiquadFilter();
+			lpf.type = 'lowpass';
+			lpf.frequency.value = 1100;
+			a.connect(synth.lpf); 
+			lpf.connect(synth.destination);
+			*/
+			a.connect(synth.destination);
+
+			setTimeout(function(){
+				a.frequency.value = 293.67;
+			}, 100 * 1.5);
+			setTimeout(function(){
+				a.frequency.value = 329.63;
+			}, (100 + 200)*1.5);
+			setTimeout(function(){
+				a.frequency.value = 349.23;
+			}, (100 + 200 + 100)*1.5 );
+			setTimeout(function(){
+				a.frequency.value = 392;
+			}, (100 + 200 + 100 + 200)*1.5 );
+			setTimeout(function(){
+				a.frequency.value = 329.63;
+			}, (100 + 200 + 100 + 200 + 100)*1.5 );
+			setTimeout(function(){
+				a.frequency.value = 261.63;
+			}, (100 + 200 + 100 + 200 + 100 + 300)*1.5 );
+			setTimeout(function(){
+				a.frequency.value = 293.67;
+			}, (100 + 200 + 100 + 200 + 100 + 300 + 200)*1.5 );
+			setTimeout(function(){
+				a.stop();
+			}, (100 + 200 + 100 + 200 + 100 + 300 + 200 + 100)*1.5 );
+		}
+
+
+
+		
+		
+	</script>
+
+	L I C K<br>B U T T O N
+
+	<div></div>
+
+</body>
+</html>
