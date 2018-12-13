@@ -1,72 +1,244 @@
 <html>
+
 <head>
-	<title>Lick Button</title>
+	<title>Harmonic Sequencer</title>
+
 </head>
 <body>
+	<!-- <p> Please set parameters for your sequence:</p> -->
+	<font color = "white"> 
+	<form id="frm1" action="/action_page.php">
+	  	Rate (milliseconds): .......... <input type="number" value = "200" name="fname" id = "rt"> suggested 0.01-0.5     ........  Fundamental (Hz): ................. <input type="number" value = "48" name="fname" id = "fund"> suggested 20-100<br>
+	  	Harmonic MAX: ............... <input type="number" value = "12" name="fname" id ="hmax"> suggested 4-32   ..............    Image Choice Offset MIN: .... <input type="number" value = "0" name="fname" id = "icomin"> suggested 0-10<br>
+	  	Sequence Length MAX: ... <input type="number" value = "16" name="fname" id = "slmax"> suggested 4-32      ..............    Image Choice Offset MAX: ... <input type="number" value = "132" name="fname" id = "icomax"> suggested 0-48<br>
+		<input type="button" onclick="play()" value="Play" id = "play"> ................ <input type="button" onclick="rerun()" value="Stop" id = "rerun">
+	</form>
+	</font>
+
+	<img id = "mainImage" src = " ">
+	
+
+	<!-- <input type = "range" id = "rateslider" name = "rateslider" min = "0.5" max = "1000"/> -->
+	
+
 	<script>
+		document.body.style.backgroundColor = 'black';
 
-		document.body.style.backgroundColor = 'gold';
 
-		var square = document.createElement( 'div' );
-		square.style.width = '100px';
-		square.style.height = '100px';
-		square.style.backgroundColor = 'red';
-		document.body.appendChild( square );
+		// add a rhythmic generator that can be out of sequence with the melodic generator
+		// maybe add some controls to use once it's running so i can perform with it
 
-		square.onclick = changeSquareColor;
-		function changeSquareColor()
+
+		// add rerun button
+		// add update button
+
+		// a cheap version could simply say when the button rerun button is clicked, the frequency of the last is set to zero and then it waits a ms before retriggering the play button
+
+		/*
+		
+		create a sequencer where you set the rate, and maximum harmonic/mean sequence length, and press a button and it autogenerates a random looping sequence of harmonics.
+		you can also use an offset number to go to different sections of the images folder.
+		
+		set it so that when 0 is hit, the sequence the cont goes to zero so it loops.
+
+		*/
+
+		//var array = ['3','2','3','4','5','1','4.5','2.5','1','9','6','3','2','3','4','5','1','4.5','2.5','1','9','6'];
+		// var array = [4,6,4,3,7,4,5,7,12,8,2,7,5,4,2,7,2,7,2,6,7,4,5,2,7];
+		//var array = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+		// how do I automate making an array automated?
+		//array.append(400);
+		//array.push and// array.pop (takes one off the end)
+
+		// var imagechoiceoffsetmax = document.querySelector('#icomax');
+		// var imagechoiceoffsetmin = document.querySelector('#icomin');
+		// var pitchmax = document.querySelector('#hmax');
+		// var sqlengthmax = document.querySelector('#slmax');
+		// var rate = document.querySelector('#rt');
+		// var fundamental = document.querySelector('#fund');
+
+		
+
+		var play = document.querySelector('#play');
+		play.onclick = runsequencer;
+		function runsequencer(event)
 		{
-			this.style.backgroundColor = 'gold';
-			//oscillator
-			var synth = new AudioContext();
-			var a = synth.createOscillator();
-			a.type = 'sine';
-			a.frequency.value = 196;
-			a.start(0);
-			/*
-			var lpf = synth.createBiquadFilter();
-			lpf.type = 'lowpass';
-			lpf.frequency.value = 1100;
-			a.connect(synth.lpf); 
-			lpf.connect(synth.destination);
-			*/
-			a.connect(synth.destination);
+			var imagechoiceoffsetmax = Number(document.querySelector("#icomax").value);
+			var imagechoiceoffsetmin = Number(document.querySelector("#icomin").value);
+			var pitchmax = (document.querySelector("#hmax").value);
+			var sqlengthmax = document.querySelector("#slmax").value;
+			var rate = document.querySelector("#rt").value;
+			var fundamental = document.querySelector("#fund").value;
 
-			setTimeout(function(){
-				a.frequency.value = 293.67;
-			}, 100 * 1.5);
-			setTimeout(function(){
-				a.frequency.value = 329.63;
-			}, (100 + 200)*1.5);
-			setTimeout(function(){
-				a.frequency.value = 349.23;
-			}, (100 + 200 + 100)*1.5 );
-			setTimeout(function(){
-				a.frequency.value = 392;
-			}, (100 + 200 + 100 + 200)*1.5 );
-			setTimeout(function(){
-				a.frequency.value = 329.63;
-			}, (100 + 200 + 100 + 200 + 100)*1.5 );
-			setTimeout(function(){
-				a.frequency.value = 261.63;
-			}, (100 + 200 + 100 + 200 + 100 + 300)*1.5 );
-			setTimeout(function(){
-				a.frequency.value = 293.67;
-			}, (100 + 200 + 100 + 200 + 100 + 300 + 200)*1.5 );
-			setTimeout(function(){
-				a.stop();
-			}, (100 + 200 + 100 + 200 + 100 + 300 + 200 + 100)*1.5 );
+
+			
+
+			var array = [];
+		
+			//var imagechoiceoffsetmax = 20;
+			//var imagechoiceoffsetmin = 0;
+			var imagechoiceoffsetdiff = imagechoiceoffsetmax - imagechoiceoffsetmin ;
+			
+			var imagechoiceoffset = imagechoiceoffsetmin + (Math.floor(Math.random() * imagechoiceoffsetdiff));
+			
+			
+			
+
+
+			
+
+			var sqlength = Math.floor(Math.random() * (sqlengthmax-1)) + 1 ;
+			
+
+			
+			for (count1 = 0; count1 < sqlength; count1++ )
+			{
+				array.push(Math.floor(Math.random()*(pitchmax)));
+			}
+
+			
+			// array.push(Math.floor(Math.random()*pitchmax));
+			// array.push(Math.floor(Math.random()*pitchmax))
+			// array.push(Math.floor(Math.random()*pitchmax));
+			// array.push(Math.floor(Math.random()*pitchmax));
+
+
+			
+
+
+			var synth = new AudioContext();
+			var vco = synth.createOscillator();
+			vco.type = 'sine';
+			vco.start(0);
+			//vco.connect(synth.destination);
+			vco.frequency.value = 0;
+
+
+			var vca = synth.createGain();
+			vca.gain.value = 0.1;
+			// vca.connect(synth.destination);
+
+
+
+			var vcp = synth.createStereoPanner();
+			vcp.pan.value = 0;
+			vco.connect(vca).connect(vcp).connect(synth.destination);
+			//vcp.connect(synth.destination);
+			
+
+			
+			/*
+			var env = (function(context) 
+			{
+	  			function EnvelopeGenerator()
+	  			{
+	  				this.attackTime = 0.1;
+	  				this.releaseTime = 0.1;
+	  			}
+
+			}
+			*/
+
+
+			setInterval( runForever, rate); // running clock
+			//setTimeout( runOnce, 500 ); // one shot clock wait
+			// document.body.onmousemove = function( event )
+			// {
+			// 	console.log(event.pageY);
+			// 	setInterval( runForever, event.pageY);
+			// }
+
+			// var rateslider = document.querySelector('#rateslider');
+			// rateslider.oninput = function(event)
+			// {
+			// 	console.log(event.srcElement.value);
+			// 	setInterval( runForever, event.srcElement.value);
+			// }
+
+
+			
+
+			
+			
+			var counter = 0;
+			var imageElement = document.querySelector( '#mainImage');
+			
+			var pause = 0;
+
+
+			var rerun = document.querySelector('#rerun');
+			rerun.onclick = pauseit;
+			function pauseit(event)
+			{
+				document.body.style.backgroundColor = 'black';
+				imageElement.src = 'images/blank.jpg';
+				vco.frequency.value = 0;
+				pause = 1;
+				imageElement = 0;
+			}
+
+
+
+
+
+
+			function runForever()
+			{
+				//console.log(imagechoiceoffset);
+				
+				if ((array[ counter ]) > 0)
+				{
+					vca.gain.value = 1 / Math.sqrt((array[ counter ]));
+				}
+				else
+				{
+					vca.gain.value = 0;
+				}
+
+				if (pause == 0)
+				{
+					vco.frequency.value = (array[ counter ]) * fundamental;
+				}
+				else
+				{
+					vco.frequency.value = 0;
+					vca.gain.value = 0;
+				}
+				
+				imageElement.src = 'images/' + (( array[ counter ]) + imagechoiceoffset ) +'.jpg';
+				
+				if (counter < array.length - 1)
+				{
+					
+					counter = counter + 1;
+				}
+				else
+				{
+					counter = 0;
+				}
+			}
 		}
 
 
 
+
 		
 		
+
+		////images
+
+		// var arrayImages = ['/Users/wilfamis/Documents/internet art 2018 workshop/day 4/images/0.jpg','/Users/wilfamis/Documents/internet art 2018 workshop/day 4/images/1.jpg'];
+
+		// var count2 = 0;
+		// var imageElement = document.querySelector( '#mainImage');
+		// function runForever()
+		// {
+		// 	imageElement.src = '/Users/wilfamis/Documents/internet art 2018 workshop/day 4/images/' + count2 +'.jpg';
+		// 	count2 = count2 + 1
+		// }
+
+
 	</script>
-
-	L I C K<br>B U T T O N
-
-	<div></div>
 
 </body>
 </html>
